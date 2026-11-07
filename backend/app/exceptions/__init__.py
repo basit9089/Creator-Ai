@@ -1,0 +1,1 @@
+"""Application-wide error handling."""

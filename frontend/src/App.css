@@ -1,0 +1,120 @@
+/* ==========================================================
+   Creator AI — application styles
+   Replaces the default Vite starter stylesheet. Deliberately small:
+   the dashboard is built in a later phase.
+   ========================================================== */
+
+:root {
+  --bg: #0f1115;
+  --surface: #171a21;
+  --border: #262b36;
+  --text: #e6e8ee;
+  --text-muted: #9aa3b2;
+  --accent: #6aa9ff;
+
+  --status-healthy: #3fb950;
+  --status-degraded: #d29922;
+  --status-unhealthy: #f85149;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+}
+
+.app-shell {
+  max-width: 52rem;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+}
+
+.app-placeholder {
+  margin-top: 2.5rem;
+  padding: 1.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+}
+
+.app-placeholder h2 {
+  margin-top: 0;
+  font-size: 1.125rem;
+}
+
+.app-placeholder p {
+  color: var(--text-muted);
+}
+
+.app-placeholder__note {
+  margin-bottom: 0;
+  font-size: 0.875rem;
+}
+
+code {
+  padding: 0.1rem 0.35rem;
+  background: rgba(110, 118, 129, 0.25);
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+}
+
+/* ---------- Status badge ---------- */
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.status-badge__model {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.status-badge--healthy {
+  border-color: color-mix(in srgb, var(--status-healthy) 45%, transparent);
+  color: var(--status-healthy);
+}
+
+.status-badge--degraded {
+  border-color: color-mix(in srgb, var(--status-degraded) 45%, transparent);
+  color: var(--status-degraded);
+}
+
+.status-badge--unhealthy,
+.status-badge--error {
+  border-color: color-mix(in srgb, var(--status-unhealthy) 45%, transparent);
+  color: var(--status-unhealthy);
+}
+
+.status-badge--loading {
+  color: var(--text-muted);
+}

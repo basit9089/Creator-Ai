@@ -1,0 +1,35 @@
+# ==========================================================
+# Creator AI — Backend Runtime Dependencies
+# ==========================================================
+# Versions are pinned to the versions currently installed and
+# verified working in backend/.venv (Python 3.14, Windows).
+#
+# Install:
+#   python -m pip install -r requirements.txt
+#
+# Test-only dependencies live in requirements-dev.txt
+# ==========================================================
+
+# ---------- Direct dependencies ----------
+fastapi==0.142.2
+uvicorn==0.54.0
+pydantic==2.13.5
+ollama==0.6.3
+
+# ---------- Transitive dependencies (pinned for reproducibility) ----------
+# These are installed automatically by the packages above. They are
+# pinned so that a fresh install reproduces the current, verified
+# environment exactly.
+annotated-doc==0.0.5
+annotated-types==0.8.0
+anyio==4.15.1
+certifi==2026.7.22
+click==8.5.0
+h11==0.16.0
+httpcore==1.0.9
+httpx==0.28.1
+idna==3.20
+pydantic_core==2.46.5
+starlette==1.7.0
+typing-inspection==0.4.4
+typing_extensions==4.16.0

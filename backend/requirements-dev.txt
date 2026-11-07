@@ -1,0 +1,11 @@
+# ==========================================================
+# Creator AI — Backend Development / Test Dependencies
+# ==========================================================
+# Install alongside the runtime dependencies:
+#   python -m pip install -r requirements-dev.txt
+# ==========================================================
+
+-r requirements.txt
+
+# ---------- Testing ----------
+pytest==9.0.1
