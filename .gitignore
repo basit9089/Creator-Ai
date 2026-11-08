@@ -64,6 +64,7 @@ logs/
 *.mkv
 *.m4a
 *.srt
+*.vtt
 
 # ---------- OS ----------
 .DS_Store

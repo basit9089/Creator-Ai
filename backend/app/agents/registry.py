@@ -253,13 +253,19 @@ PLANNED_AGENT_DESCRIPTIONS: dict[str, str] = {
     "fact_checker": "Verifies claims against the supplied material and reports verdicts.",
     "scriptwriter": "Turns researched material into a narration script for a video.",
     "video_producer": "Plans or renders the video assets for a script.",
-    "captions_thumbnail": "Produces captions and thumbnail concepts for a finished video.",
+    "captions_thumbnail": "Generates captions, a local thumbnail and SEO metadata for a finished video.",
     "publisher": "Prepares a finished video for upload and publishes it.",
 }
 
 #: Agents that have a real implementation. Everything else in
 #: :data:`PLANNED_AGENT_NAMES` is still a placeholder until its phase.
-IMPLEMENTED_AGENT_NAMES: tuple[str, ...] = ("researcher", "fact_checker", "scriptwriter", "video_producer")
+IMPLEMENTED_AGENT_NAMES: tuple[str, ...] = (
+    "researcher",
+    "fact_checker",
+    "scriptwriter",
+    "video_producer",
+    "captions_thumbnail",
+)
 
 
 def build_default_registry() -> AgentRegistry:
@@ -279,12 +285,14 @@ def build_default_registry() -> AgentRegistry:
     from app.agents.scriptwriter.agent import ScriptwriterAgent
     from app.agents.fact_checker.agent import FactCheckerAgent
     from app.agents.researcher.agent import ResearcherAgent
+    from app.agents.captions_thumbnail.agent import CaptionsThumbnailAgent
 
     registry = AgentRegistry()
     registry.register(VideoProducerAgent())
     registry.register(ScriptwriterAgent())
     registry.register(FactCheckerAgent())
     registry.register(ResearcherAgent())
+    registry.register(CaptionsThumbnailAgent())
 
     for name in PLANNED_AGENT_NAMES:
         if name in IMPLEMENTED_AGENT_NAMES:

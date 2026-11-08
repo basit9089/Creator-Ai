@@ -15,6 +15,7 @@ fastapi==0.142.2
 uvicorn==0.54.0
 pydantic==2.13.5
 ollama==0.6.3
+Pillow==12.3.0
 
 # ---------- Transitive dependencies (pinned for reproducibility) ----------
 # These are installed automatically by the packages above. They are
