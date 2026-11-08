@@ -8,7 +8,7 @@ from collections.abc import AsyncIterator
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import agents, ai, fact_check, health, research, script
+from app.api.routes import agents, ai, fact_check, health, research, script, video
 from app.core.config import Settings, get_settings
 from app.core.logging import RequestLoggingMiddleware, configure_logging, get_logger
 from app.dependencies import close_services
@@ -82,6 +82,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(research.router)
     app.include_router(fact_check.router)
     app.include_router(script.router)
+    app.include_router(video.router)
 
     logger.info(
         "application_configured cors_origins=%s",

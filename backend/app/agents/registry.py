@@ -259,7 +259,7 @@ PLANNED_AGENT_DESCRIPTIONS: dict[str, str] = {
 
 #: Agents that have a real implementation. Everything else in
 #: :data:`PLANNED_AGENT_NAMES` is still a placeholder until its phase.
-IMPLEMENTED_AGENT_NAMES: tuple[str, ...] = ("researcher", "fact_checker", "scriptwriter")
+IMPLEMENTED_AGENT_NAMES: tuple[str, ...] = ("researcher", "fact_checker", "scriptwriter", "video_producer")
 
 
 def build_default_registry() -> AgentRegistry:
@@ -275,11 +275,13 @@ def build_default_registry() -> AgentRegistry:
     :meth:`AgentRegistry.register_placeholder`, so a shipped agent cannot
     be silently downgraded by a later edit to this function.
     """
+    from app.agents.video_producer.agent import VideoProducerAgent
     from app.agents.scriptwriter.agent import ScriptwriterAgent
     from app.agents.fact_checker.agent import FactCheckerAgent
     from app.agents.researcher.agent import ResearcherAgent
 
     registry = AgentRegistry()
+    registry.register(VideoProducerAgent())
     registry.register(ScriptwriterAgent())
     registry.register(FactCheckerAgent())
     registry.register(ResearcherAgent())

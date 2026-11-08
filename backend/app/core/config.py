@@ -43,6 +43,11 @@ SearchProviderName = Literal["duckduckgo", "wikipedia", "fallback"]
 #: ``backend`` folder). Used to locate the local ``.env`` file.
 BACKEND_DIR: Final[Path] = Path(__file__).resolve().parent.parent.parent
 
+#: Repository root (the folder that contains ``source/``). The local
+#: media and render storage lives *outside* the source tree, so media
+#: artifacts are never accidentally committed.
+PROJECT_ROOT: Final[Path] = BACKEND_DIR.parent.parent
+
 #: Name of the local, git-ignored environment file.
 ENV_FILE_NAME: Final[str] = ".env"
 
@@ -81,6 +86,11 @@ DEFAULT_VALUES: Final[dict[str, str]] = {
     "MAX_EXTRACTED_TEXT": "20000",
     "MAX_SOURCE_REDIRECTS": "5",
     "MIN_USABLE_SOURCES": "2",
+    # ---------- Local media storage ----------
+    # Root for media/, renders/ and projects/. Empty means "derive it
+    # from the repository location", so a fresh clone works without
+    # configuration and artifacts stay outside source/ (and out of Git).
+    "STORAGE_ROOT": "",
 }
 
 
@@ -210,6 +220,11 @@ class Settings(BaseModel):
     max_source_redirects: int = Field(default=int(DEFAULT_VALUES["MAX_SOURCE_REDIRECTS"]), ge=0)
     min_usable_sources: int = Field(default=int(DEFAULT_VALUES["MIN_USABLE_SOURCES"]), ge=1)
 
+    # ---------- Local media storage ----------
+    #: Root under which ``media/``, ``renders/`` and ``projects/`` are
+    #: created. Empty string means "derive from the repository layout".
+    storage_root: str = DEFAULT_VALUES["STORAGE_ROOT"]
+
     @field_validator("log_level")
     @classmethod
     def _validate_log_level(cls, value: str) -> str:
@@ -269,6 +284,43 @@ class Settings(BaseModel):
     def server_url(self) -> str:
         """URL used when starting the development server."""
         return f"http://{self.app_host}:{self.app_port}"
+
+    # ---------- Storage paths ----------
+
+    @property
+    def storage_root_path(self) -> Path:
+        """Absolute root for local media, renders and project artifacts.
+
+        Configured via ``STORAGE_ROOT``; when unset the repository
+        layout is used (``<repo>/media`` etc.), which keeps generated
+        artifacts outside ``source/`` and therefore out of Git.
+        """
+        if self.storage_root.strip():
+            return Path(self.storage_root.strip()).expanduser().resolve()
+        return PROJECT_ROOT
+
+    @property
+    def media_dir(self) -> Path:
+        """Root of the media library (images, video, audio, thumbnails)."""
+        return self.storage_root_path / "media"
+
+    @property
+    def renders_dir(self) -> Path:
+        """Directory where rendered videos are written."""
+        return self.storage_root_path / "renders"
+
+    @property
+    def projects_dir(self) -> Path:
+        """Directory holding per-project artifacts (script, production...)."""
+        return self.storage_root_path / "projects"
+
+    def project_dir(self, project_id: str) -> Path:
+        """Directory for a single project's artifacts.
+
+        ``project_id`` is validated by callers; this helper only joins
+        it onto the configured root so no module hard-codes paths.
+        """
+        return self.projects_dir / project_id
 
     def default_generation_options(self) -> Any:
         """Build the default :class:`GenerationOptions` for this deployment.
@@ -352,6 +404,7 @@ def get_settings() -> Settings:
         min_usable_sources=int(
             os.getenv("MIN_USABLE_SOURCES", DEFAULT_VALUES["MIN_USABLE_SOURCES"])
         ),
+        storage_root=os.getenv("STORAGE_ROOT", DEFAULT_VALUES["STORAGE_ROOT"]),
     )
 
 

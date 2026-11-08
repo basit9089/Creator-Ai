@@ -19,6 +19,7 @@ from pathlib import Path
 import pytest
 from fastapi.testclient import TestClient
 
+from app.agents.registry import get_registry
 from app.core.config import reset_settings_cache
 from app.dependencies import get_ai_provider, reset_provider_cache
 from app.main import create_app
@@ -360,12 +361,16 @@ def reset_caches() -> Iterator[None]:
 
     Without this, a test that changes an environment variable would leak
     that value into every test that follows, through the settings cache.
+    The shared agent registry is cleared too: it holds agent instances
+    that cache their resolved settings (storage roots) on first use.
     """
     reset_settings_cache()
     reset_provider_cache()
+    get_registry.cache_clear()
     yield
     reset_settings_cache()
     reset_provider_cache()
+    get_registry.cache_clear()
 
 
 @pytest.fixture
